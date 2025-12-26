@@ -1,3 +1,4 @@
+使用Gemini
 # 第一章
 ### 基礎邏輯門 (Basic Gates)
 - Not,"Nand(in, in)"
@@ -36,4 +37,3 @@ DMux4Way / DMux8Way
 - zr (Zero Flag)：若輸出為 0 則為 1。實作上使用 Or8Way 檢查所有位元是否皆為 0
 - ng (Negative Flag)：若輸出為負則為 1。實作上直接讀取輸出總線的最高位元（out[15]）
 
-- 
