@@ -13,5 +13,18 @@ CHIP RAM16K {
     OUT out[16];
 
     PARTS:
-    //// Replace this comment with your code.
+    // 1. 使用 DMux4Way 将 load 信号分配给正确的 RAM4K 块
+    // 使用地址的高两位 address[12..13] 进行选择
+    DMux4Way(in=load, sel=address[12..13], a=loadA, b=loadB, c=loadC, d=loadD);
+
+    // 2. 实例化 4 个 RAM4K 芯片
+    // 每个芯片使用相同的输入数据 'in' 和相同的内部地址 'address[0..11]'
+    RAM4K(in=in, load=loadA, address=address[0..11], out=outA);
+    RAM4K(in=in, load=loadB, address=address[0..11], out=outB);
+    RAM4K(in=in, load=loadC, address=address[0..11], out=outC);
+    RAM4K(in=in, load=loadD, address=address[0..11], out=outD);
+
+    // 3. 使用 Mux4Way16 根据地址的高两位从 4 个块中选择输出
+    Mux4Way16(a=outA, b=outB, c=outC, d=outD, sel=address[12..13], out=out);
 }
+
