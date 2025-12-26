@@ -18,5 +18,14 @@ CHIP DMux8Way {
     OUT a, b, c, d, e, f, g, h;
 
     PARTS:
-    //// Replace this comment with your code.
+    // 第一步：根據最高位元 sel[2] 決定訊號要去前半部還是後半部
+    DMux(in=in, sel=sel[2], a=firstHalf, b=secondHalf);
+
+    // 第二步：利用我們之前寫好的 DMux4Way 處理剩下的兩位元 sel[0..1]
+    // 處理 a, b, c, d
+    DMux4Way(in=firstHalf, sel=sel[0..1], a=a, b=b, c=c, d=d);
+
+    // 處理 e, f, g, h
+    DMux4Way(in=secondHalf, sel=sel[0..1], a=e, b=f, g=g, h=h);
 }
+
