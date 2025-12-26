@@ -11,5 +11,21 @@ CHIP Mux {
     OUT out;
 
     PARTS:
-    //// Replace this comment with your code.
+    Mux (Multiplexor，多路選擇器) 是數位電路中極其重要的元件，它就像一個「二選一」的開關。根據選擇訊號 sel 的值，決定要讓輸入 a 還是 b 通過並成為輸出。邏輯設計概念Mux 的邏輯可以用一句話概括：如果 (sel 為 0 且 a 為 1) 或者 (sel 為 1 且 b 為 1)，則輸出為 1。我們可以將其拆解為三個部分：處理 a 路線：當 sel 是 0 時，我們希望 a 能通過。這等於運算 a And (Not sel)。處理 b 路線：當 sel 是 1 時，我們希望 b 能通過。這等於運算 b And sel。合併結果：只要其中一條路線成立，輸出就是 1。這等於將上述兩者進行 Or 運算。布林表達式：$$\text{out} = (a \cdot \overline{sel}) + (b \cdot sel)$$HDL 代碼實作你需要用到 Not、And 和 Or 三種門來組成：程式碼片段CHIP Mux {
+    IN a, b, sel;
+    OUT out;
+
+    PARTS:
+    // 1. 先反轉 sel，用來控制 a 路線
+    Not(in=sel, out=notSel);
+
+    // 2. 當 sel 為 0 (notSel 為 1) 時，a 決定輸出
+    And(a=a, b=notSel, out=aPath);
+
+    // 3. 當 sel 為 1 時，b 決定輸出
+    And(a=b, b=sel, out=bPath);
+
+    // 4. 合併兩條路線的結果
+    Or(a=aPath, b=bPath, out=out);
+
 }
