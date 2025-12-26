@@ -44,3 +44,62 @@ Gemini:https://gemini.google.com/share/6c1efded0ed8
 ### FibonacciSeries
 - 測試虛擬機器處理非遞迴迴圈與 pointer 段操作的能力
 - 程式會計算斐波那契數列的前 $n$ 個數字，並將結果依序存入指定的記憶體位址
+
+# 第九章
+Gemini:https://gemini.google.com/share/14a10625f76a
+### Average
+- 計算一組整數的平均值
+1. 變數宣告
+程式首先定義了 Main 類別與 main 函數，並宣告了所需的變數：  
+- Array a: 用於儲存使用者輸入的數字序列
+-  int length: 紀錄使用者預計輸入的數字總數
+-  int i, sum: i 作為迴圈計數器，sum 則用來累加所有輸入數字的總和
+2. 初始化與陣列建立
+- 讀取長度：透過 Keyboard.readInt 詢問使用者「要輸入多少個數字？」
+- 建立陣列：使用 Array.new(length) 依照使用者指定的長度配置記憶體空間給陣列
+### ComplexArrays
+- 測試 Jack 語言 處理「複雜陣列（Complex Arrays）」與「巢狀參考」的能力
+- 展示了 Jack 語言中陣列本質上是記憶體指標的特性，並透過幾項測試來驗證運算邏輯是否正確
+### ConvertToBin
+- 將一個 16 位元的十進位整數轉換為二進位表示法，並將結果存放在電腦的記憶體
+- 從 RAM[8000] 讀取一個數值
+- 將轉換後的 16 個位元（0 或 1）分別存放在 RAM[8001] 到 RAM[8016]
+- 在轉換開始前，會先將目標記憶體範圍（RAM[8001]..8016）初始化為 -1，以確保測試結果的正確性
+### Fraction
+- 定義與使用 物件（Object）
+- 建立一個自定義的「分數（Fraction）」資料型別，並執行分數的加法運算
+1. 屬性 (Field)
+- 宣告了兩個成員變數（field）：numerator (分子) 與 denominator (分母)
+2. 建構子 (Constructor)
+- new(int x, int y)：建立新的分數物件
+- 它會將傳入的參數設定給成員變數，並立即呼叫 reduce() 方法進行約分
+- 最後回傳 this（該物件在記憶體中的參考位址）
+3. 核心運算方法 (Methods)
+- plus(Fraction other)：執行加法運算
+- reduce()：自動約分
+- print()：以 x/y 的格式將數值顯示在螢幕上
+- dispose()：手動釋放記憶體
+### HelloWorld
+- Jack 程式的基本結構以及如何與內建作業系統（OS）類別進行互動
+- 相當於print("Hello world!")
+### LIST
+- Jack 語言中實作與使用基礎的資料結構：單向鏈結串列（Linked List）
+- 列的結構，它是一種遞迴式的資料結構
+### Pong
+- 構成了一個完整的 Pong（乒乓球）遊戲
+- 這套程式碼展示了 Jack 語言處理圖形與物件互動的能力：
+1. 封裝：將球、球拍、遊戲邏輯分別寫在不同檔案
+2. 事件驅動：透過輪詢鍵盤狀態來改變球拍方向 
+3. 座標計算：球的反射角度並非簡單的物理反射，而是透過比例計算重設目的地 (setDestination) 。
+### Squre
+- 玩家透過鍵盤控制螢幕上一個黑色正方形的移動與大小
+- 展示了**物件導向程式設計（OOP）**在 Jack 語言中的應用：
+1. 封裝：將繪圖細節封裝在 Square，將規則封裝在 SquareGame
+2. 互動性：透過輪詢（Polling）鍵盤狀態來實現即時反饋
+3. 資源管理：手動實作 dispose() 以管理系統有限的記憶體資源
+
+# 第十章
+Gimini:https://gemini.google.com/share/f714cc72e0dd
+### ArrayTest
+- 向使用者詢問數字數量，存入陣列，計算總和，最後輸出平均值
+### 
