@@ -54,3 +54,12 @@ Register (16-bit) : 由 16 個 Bit 晶片並行組成，共享同一個 load 信
 ### PC
 CPU 的導航員，具有遞增、加載與重置功能
 
+# 第四章
+Gemini:https://gemini.google.com/share/ab88ddeb4173
+### 無窮迴圈 (Infinite Loop)
+持續偵測鍵盤狀態
+### 鍵盤位址 ($KBD$)
+在 Hack 架構中，記憶體位址 $24576$ 會即時反映鍵盤按下的鍵值
+### 螢幕位址 ($SCREEN$)
+從位址 $16384$ 開始，每一位元 (bit) 代表一個像素
+
