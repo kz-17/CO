@@ -13,5 +13,27 @@ CHIP RAM512 {
     OUT out[16];
 
     PARTS:
-    //// Replace this comment with your code.
+    // 1. 使用 DMux8Way 将写使能信号 (load) 转发给正确的 RAM64 块
+    // 选择逻辑基于地址的高三位 address[6..8]
+    DMux8Way(in=load, sel=address[6..8], 
+             a=loadA, b=loadB, c=loadC, d=loadD, 
+             e=loadE, f=loadF, g=loadG, h=loadH);
+
+    // 2. 实例化 8 个 RAM64 芯片
+    // 它们共享同一个输入值 'in'，但只有被分配到 'load' 信号的块会执行写入
+    // 寻址使用低六位 address[0..5]
+    RAM64(in=in, load=loadA, address=address[0..5], out=outA);
+    RAM64(in=in, load=loadB, address=address[0..5], out=outB);
+    RAM64(in=in, load=loadC, address=address[0..5], out=outC);
+    RAM64(in=in, load=loadD, address=address[0..5], out=outD);
+    RAM64(in=in, load=loadE, address=address[0..5], out=outE);
+    RAM64(in=in, load=loadF, address=address[0..5], out=outF);
+    RAM64(in=in, load=loadG, address=address[0..5], out=outG);
+    RAM64(in=in, load=loadH, address=address[0..5], out=outH);
+
+    // 3. 使用 Mux8Way16 根据地址的高三位从 8 个块中选出正确的输出值
+    Mux8Way16(a=outA, b=outB, c=outC, d=outD, 
+              e=outE, f=outF, g=outG, h=outH, 
+              sel=address[6..8], out=out);
 }
+
