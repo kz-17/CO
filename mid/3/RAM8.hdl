@@ -13,5 +13,32 @@ CHIP RAM8 {
     OUT out[16];
 
     PARTS:
-    //// Replace this comment with your code.
+    这是 Nand2Tetris 存储系统的最基础构建块。RAM8 是直接由 8 个 16-bit Register 组成的。核心逻辑RAM8 的地址线为 3 位 ($2^3 = 8$)，足以精确选中 8 个寄存器中的每一个。写操作：使用 DMux8Way 将 load 信号发送到由 address 指定的那个寄存器。读操作：所有寄存器都会输出它们存储的值，我们使用 Mux8Way16 根据 address 选择其中一个作为芯片的最终输出。HDL 代码实现程式碼片段CHIP RAM8 {
+    IN in[16], load, address[3];
+    OUT out[16];
+
+    PARTS:
+    // 1. 分配 load 信号
+    // 只有被 address 选中的寄存器才会接收到 load 信号，从而执行写入
+    DMux8Way(in=load, sel=address, 
+             a=loadA, b=loadB, c=loadC, d=loadD, 
+             e=loadE, f=loadF, g=loadG, h=loadH);
+
+    // 2. 实例化 8 个 16 位寄存器 (Register)
+    // 所有的寄存器都接收相同的输入数据 'in'
+    Register(in=in, load=loadA, out=outA);
+    Register(in=in, load=loadB, out=outB);
+    Register(in=in, load=loadC, out=outC);
+    Register(in=in, load=loadD, out=outD);
+    Register(in=in, load=loadE, out=outE);
+    Register(in=in, load=loadF, out=outF);
+    Register(in=in, load=loadG, out=outG);
+    Register(in=in, load=loadH, out=outH);
+
+    // 3. 选择输出数据
+    // 根据 address 从 8 个寄存器的输出中选出一个
+    Mux8Way16(a=outA, b=outB, c=outC, d=outD, 
+              e=outE, f=outF, g=outG, h=outH, 
+              sel=address, out=out);
 }
+
