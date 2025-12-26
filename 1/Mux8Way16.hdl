@@ -20,5 +20,14 @@ CHIP Mux8Way16 {
     OUT out[16];
 
     PARTS:
-    //// Replace this comment with your code.
+    // 1. 處理前四路 (sel 為 000, 001, 010, 011 時)
+    // 這裡使用 sel 的低兩位元 sel[0..1]
+    Mux4Way16(a=a, b=b, c=c, d=d, sel=sel[0..1], out=outABCD);
+
+    // 2. 處理後四路 (sel 為 100, 101, 110, 111 時)
+    Mux4Way16(a=e, b=f, c=g, d=h, sel=sel[0..1], out=outEFGH);
+
+    // 3. 最後根據 sel 的最高位元 sel[2] 決定選哪一組結果
+    Mux16(a=outABCD, b=outEFGH, sel=sel[2], out=out);
 }
+
