@@ -18,5 +18,23 @@ CHIP Computer {
     IN reset;
 
     PARTS:
-    //// Replace this comment with your code.
+    // 1. ROM32K: 負責儲存並輸出目前 PC 指向的指令
+    // address[15] 但 ROM32K 實際接收 15 位元
+    ROM32K(address=pc, out=instruction);
+
+    // 2. CPU: 核心邏輯單元
+    CPU(inM=memOut, 
+        instruction=instruction, 
+        reset=reset, 
+        outM=outM, 
+        writeM=writeM, 
+        addressM=addressM, 
+        pc=pc);
+
+    // 3. Memory: 包含 RAM16K, Screen, 和 Keyboard
+    Memory(in=outM, 
+           load=writeM, 
+           address=addressM, 
+           out=memOut);
 }
+
