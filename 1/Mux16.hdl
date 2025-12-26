@@ -12,5 +12,26 @@ CHIP Mux16 {
     OUT out[16];
 
     PARTS:
-    //// Replace this comment with your code.
+    Mux16 是 16 位元版本的二選一選擇器。它的邏輯與 And16 類似，是將基本的 Mux 邏輯擴展到 16 條並行的線路上。邏輯概念雖然輸入 a 和 b 是 16 位元的總線（Bus），但選擇訊號 sel 只有一個。這意味著：當 sel = 0 時，輸出的 16 個位元全部取自 a（即 out = a）。當 sel = 1 時，輸出的 16 個位元全部取自 b（即 out = b）。其數學表達式為：$$\text{out}[i] = (a[i] \cdot \overline{sel}) + (b[i] \cdot sel) \quad \text{for } i = 0 \dots 15$$HDL 代碼實作在 HDL 中，你需要手動將 16 個 Mux 晶片並排連接。每個 Mux 處理對應位置的位元，但它們都共用同一個 sel 訊號。程式碼片段CHIP Mux16 {
+    IN a[16], b[16], sel;
+    OUT out[16];
+
+    PARTS:
+    Mux(a=a[0],  b=b[0],  sel=sel, out=out[0]);
+    Mux(a=a[1],  b=b[1],  sel=sel, out=out[1]);
+    Mux(a=a[2],  b=b[2],  sel=sel, out=out[2]);
+    Mux(a=a[3],  b=b[3],  sel=sel, out=out[3]);
+    Mux(a=a[4],  b=b[4],  sel=sel, out=out[4]);
+    Mux(a=a[5],  b=b[5],  sel=sel, out=out[5]);
+    Mux(a=a[6],  b=b[6],  sel=sel, out=out[6]);
+    Mux(a=a[7],  b=b[7],  sel=sel, out=out[7]);
+    Mux(a=a[8],  b=b[8],  sel=sel, out=out[8]);
+    Mux(a=a[9],  b=b[9],  sel=sel, out=out[9]);
+    Mux(a=a[10], b=b[10], sel=sel, out=out[10]);
+    Mux(a=a[11], b=b[11], sel=sel, out=out[11]);
+    Mux(a=a[12], b=b[12], sel=sel, out=out[12]);
+    Mux(a=a[13], b=b[13], sel=sel, out=out[13]);
+    Mux(a=a[14], b=b[14], sel=sel, out=out[14]);
+    Mux(a=a[15], b=b[15], sel=sel, out=out[15]);
 }
+
