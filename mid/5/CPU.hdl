@@ -32,5 +32,53 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-	//// Replace this comment with your code.
+	// 1. 指令解碼
+    // instruction[15] == 0 為 A 指令，1 為 C 指令
+    Not(in=instruction[15], out=isA);
+    Not(in=isA, out=isC);
+    
+    // 2. A 暫存器邏輯
+    // 如果是 A 指令，Mux 選擇指令內容；若是 C 指令，選擇 ALU 輸出
+    Mux16(a=instruction, b=ALUout, sel=isC, out=toAReg);
+    // 載入 A 的條件：是 A 指令 OR (是 C 指令且 dest 位元 d1 設為 1)
+    Or(a=isA, b=instruction[5], out=loadA);
+    ARegister(in=toAReg, load=loadA, out=Aout, out[0..14]=addressM);
+
+    // 3. 選擇 ALU 的第二個輸入 (A 或是 M)
+    // 由指令中的 'a' 位元 (instruction[12]) 決定
+    Mux16(a=Aout, b=inM, sel=instruction[12], out=AMout);
+
+    // 4. D 暫存器邏輯
+    // 載入 D 的條件：是 C 指令且 dest 位元 d2 設為 1
+    And(a=isC, b=instruction[4], out=loadD);
+    DRegister(in=ALUout, load=loadD, out=Dout);
+
+    // 5. ALU 計算
+    ALU(x=Dout, y=AMout, 
+        zx=instruction[11], nx=instruction[10], 
+        zy=instruction[9], ny=instruction[8], 
+        f=instruction[7], no=instruction[6], 
+        out=ALUout, out=outM, zr=zr, ng=ng);
+
+    // 6. 輸出控制 (writeM)
+    // 當是 C 指令且 d3 (instruction[3]) 位元為 1 時寫入記憶體
+    And(a=isC, b=instruction[3], out=writeM);
+
+    // 7. PC 邏輯 (跳轉判定)
+    // 判斷 ALU 輸出是否大於零
+    Or(a=zr, b=ng, out=notPos);
+    Not(in=notPos, out=pos);
+    
+    And(a=instruction[0], b=pos, out=jgt); // >0
+    And(a=instruction[1], b=zr,  out=jeq); // =0
+    And(a=instruction[2], b=ng,  out=jlt); // <0
+
+    Or(a=jgt, b=jeq, out=jge);
+    Or(a=jge, b=jlt, out=jumpCondition);
+    
+    // 只有在 C 指令時才允許跳轉
+    And(a=isC, b=jumpCondition, out=pcLoad);
+    Not(in=pcLoad, out=pcInc);
+
+    PC(in=Aout, load=pcLoad, inc=pcInc, reset=reset, out[0..14]=pc);
 }
