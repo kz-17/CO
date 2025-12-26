@@ -13,5 +13,26 @@ CHIP RAM4K {
     OUT out[16];
 
     PARTS:
-    //// Replace this comment with your code.
+    // 1. 使用 DMux8Way 将 load 信号分配给 8 个 RAM512 中的一个
+    // 根据地址的高三位 address[9..11] 进行分配
+    DMux8Way(in=load, sel=address[9..11], 
+             a=loadA, b=loadB, c=loadC, d=loadD, 
+             e=loadE, f=loadF, g=loadG, h=loadH);
+
+    // 2. 实例化 8 个 RAM512 芯片
+    // 它们共享输入数据和低 9 位地址
+    RAM512(in=in, load=loadA, address=address[0..8], out=outA);
+    RAM512(in=in, load=loadB, address=address[0..8], out=outB);
+    RAM512(in=in, load=loadC, address=address[0..8], out=outC);
+    RAM512(in=in, load=loadD, address=address[0..8], out=outD);
+    RAM512(in=in, load=loadE, address=address[0..8], out=outE);
+    RAM512(in=in, load=loadF, address=address[0..8], out=outF);
+    RAM512(in=in, load=loadG, address=address[0..8], out=outG);
+    RAM512(in=in, load=loadH, address=address[0..8], out=outH);
+
+    // 3. 使用 Mux8Way16 根据地址的高三位汇聚输出
+    Mux8Way16(a=outA, b=outB, c=outC, d=outD, 
+              e=outE, f=outF, g=outG, h=outH, 
+              sel=address[9..11], out=out);
 }
+
