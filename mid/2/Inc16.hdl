@@ -11,5 +11,8 @@ CHIP Inc16 {
     OUT out[16];
 
     PARTS:
-    //// Replace this comment with your code.
+    // 將輸入 in 與數值 1 (只有最低位元為 true) 相加
+    // b[0]=true 代表 1，b[1..15]=false 代表 0
+    Add16(a=in, b[0]=true, b[1..15]=false, out=out);
+
 }
