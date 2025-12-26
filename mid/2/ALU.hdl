@@ -41,5 +41,31 @@ CHIP ALU {
         ng;      // if (out < 0)  equals 1, else 0
 
     PARTS:
-    //// Replace this comment with your code.
+    // --- 處理 x ---
+    Mux16(a=x, b=false, sel=zx, out=x1);        // if zx then x=0
+    Not16(in=x1, out=notx1);
+    Mux16(a=x1, b=notx1, sel=nx, out=x2);       // if nx then x=!x
+
+    // --- 處理 y ---
+    Mux16(a=y, b=false, sel=zy, out=y1);        // if zy then y=0
+    Not16(in=y1, out=noty1);
+    Mux16(a=y1, b=noty1, sel=ny, out=y2);       // if ny then y=!y
+
+    // --- 核心運算 f ---
+    Add16(a=x2, b=y2, out=addXY);               // x+y
+    And16(a=x2, b=y2, out=andXY);               // x&y
+    Mux16(a=andXY, b=addXY, sel=f, out=fOut);    // 根據 f 選擇運算
+
+    // --- 輸出處理 no 與 ng 判定 ---
+    Not16(in=fOut, out=notFOut);
+    // 注意：這裡我們將輸出拆成兩部分 (0..7, 8..15) 以便後續計算 zr
+    // 並同時取出第 15 位元作為 ng
+    Mux16(a=fOut, b=notFOut, sel=no, out=out, out[0..7]=lowOut, out[8..15]=highOut, out[15]=ng);
+
+    // --- zr 判定 (如果所有位元皆為 0，則 zr=1) ---
+    Or8Way(in=lowOut, out=orLow);
+    Or8Way(in=highOut, out=orHigh);
+    Or(a=orLow, b=orHigh, out=notZero);
+    Not(in=notZero, out=zr);
+
 }
