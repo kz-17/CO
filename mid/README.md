@@ -36,4 +36,21 @@ DMux4Way / DMux8Way
 輸出標誌位元 (Flags)：
 - zr (Zero Flag)：若輸出為 0 則為 1。實作上使用 Or8Way 檢查所有位元是否皆為 0
 - ng (Negative Flag)：若輸出為負則為 1。實作上直接讀取輸出總線的最高位元（out[15]）
+# 第三章
+Gemini:https://gemini.google.com/share/3d8cbf168c33
+### DFF 與時鐘 
+所有的記憶體單元最終都建立在 DFF (Data Flip-Flop) 之上。DFF 的基本行為是 out(t+1) = in(t)，這一個週期的延遲正是電腦產生「記憶」的關鍵
+### 晶片階層結構   
+- 建構順序遵循由下而上 (Bottom-up) 的設計原則
+1. Bit (1-bit 暫存器)
+2. Register (16-bit 暫存器)
+3. RAM8 -> RAM64 -> RAM512 -> RAM4K -> RAM16K
+4. PC (程式計數器)
+### 基礎儲存單元  
+Bit (1-bit Register) : 使用一個 Mux 和一個 DFF 組成。當 load=1 時存入新值，否則維持舊值  
+Register (16-bit) : 由 16 個 Bit 晶片並行組成，共享同一個 load 信號
+### 隨機存取記憶體 (RAM)
+使用 DMux 分發 load 信號，使用 Mux 彙整輸出
+### PC
+CPU 的導航員，具有遞增、加載與重置功能
 
