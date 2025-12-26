@@ -11,5 +11,10 @@ CHIP And {
     OUT out;
     
     PARTS:
-    //// Replace this comment with your code.
+   // 1. 先計算 Nand
+    Nand(a=a, b=b, out=nandResult);
+
+    // 2. 將 Nand 的結果反轉 (Not)，就變成了 And
+    Not(in=nandResult, out=out);
+
 }
