@@ -11,5 +11,17 @@ CHIP Xor {
     OUT out;
 
     PARTS:
-    //// Replace this comment with your code.
+    // 1. 準備反轉的訊號
+    Not(in=a, out=notA);
+    Not(in=b, out=notB);
+
+    // 2. 實作 (a And Not b)
+    And(a=a, b=notB, out=aAndNotB);
+
+    // 3. 實作 (Not a And b)
+    And(a=notA, b=b, out=notAAndB);
+
+    // 4. 將兩個結果做 Or 運算
+    Or(a=aAndNotB, b=notAAndB, out=out);
+
 }
