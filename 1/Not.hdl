@@ -11,5 +11,7 @@ CHIP Not {
     OUT out;
 
     PARTS:
-    //// Replace this comment with your code.
+   // 將輸入訊號 in 同時接到 Nand 的 a 和 b
+    Nand(a=in, b=in, out=out);
 }
+
