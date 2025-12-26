@@ -63,3 +63,19 @@ Gemini:https://gemini.google.com/share/ab88ddeb4173
 ### 螢幕位址 ($SCREEN$)
 從位址 $16384$ 開始，每一位元 (bit) 代表一個像素
 
+# 第五章
+Gemini:https://gemini.google.com/share/fab42dd40430
+### CPU.hdl (中央處理器)
+- 指令解碼：區分 A-instruction (常數設定) 與 C-instruction (運算)
+- 暫存器管理：控制 A (Address) 暫存器與 D (Data) 暫存器的讀寫
+- ALU (算術邏輯單元)：執行二進制運算並回傳狀態位元 (zr, ng)
+- 跳轉邏輯 (Jump Logic)：根據 ALU 狀態決定程式計數器 (PC) 是遞增 (inc) 還是跳轉 (load)
+### Memory.hdl (資料記憶體)
+- 將整個電腦的位址空間（32K 字組）進行統一管理，實現 記憶體映射 I/O
+- RAM16K：0x0000 - 0x3FFF (一般的數據存儲)
+- Screen：0x4000 - 0x5FFF (控制 512x256 像素螢幕輸出)
+- Keyboard：0x6000 (讀取目前按下按鍵的 ASCII 掃描碼)
+### Computer.hdl (主機)
+- 最頂層的晶片，將 ROM、CPU 與 Memory 串聯
+- ROM32K：儲存程式指令，接收 CPU 傳來的位址並輸出指令
+- 重置 (Reset)：提供重新啟動程式的功能
