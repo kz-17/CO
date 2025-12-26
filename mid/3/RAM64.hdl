@@ -13,5 +13,31 @@ CHIP RAM64 {
     OUT out[16];
 
     PARTS:
-    //// Replace this comment with your code.
+    构建 RAM64 的逻辑依然延续了 Nand2Tetris 项目中极其优雅的模块化递归结构。既然你已经有了 RAM8，那么 RAM64 就可以看作是由 8 个 RAM8 芯片组成的阵列。地址拆分逻辑RAM64 使用 6 位地址线 ($2^6 = 64$)。为了定位具体的寄存器，我们将地址分为两段：高 3 位 (address[3..5])：作为“选择器”，决定当前操作的是 8 个 RAM8 块中的哪一个。低 3 位 (address[0..2])：作为“块内地址”，选择选定 RAM8 块中的具体寄存器。HDL 代码实现程式碼片段CHIP RAM64 {
+    IN in[16], load, address[6];
+    OUT out[16];
+
+    PARTS:
+    // 1. 使用 DMux8Way 将 load 信号分配给正确的 RAM8 块
+    // 选择逻辑基于地址的高三位 address[3..5]
+    DMux8Way(in=load, sel=address[3..5], 
+             a=loadA, b=loadB, c=loadC, d=loadD, 
+             e=loadE, f=loadF, g=loadG, h=loadH);
+
+    // 2. 实例化 8 个 RAM8 芯片
+    // 它们共享输入数据 'in' 和低三位地址 'address[0..2]'
+    RAM8(in=in, load=loadA, address=address[0..2], out=outA);
+    RAM8(in=in, load=loadB, address=address[0..2], out=outB);
+    RAM8(in=in, load=loadC, address=address[0..2], out=outC);
+    RAM8(in=in, load=loadD, address=address[0..2], out=outD);
+    RAM8(in=in, load=loadE, address=address[0..2], out=outE);
+    RAM8(in=in, load=loadF, address=address[0..2], out=outF);
+    RAM8(in=in, load=loadG, address=address[0..2], out=outG);
+    RAM8(in=in, load=loadH, address=address[0..2], out=outH);
+
+    // 3. 使用 Mux8Way16 根据地址的高三位从 8 个块中选择输出
+    Mux8Way16(a=outA, b=outB, c=outC, d=outD, 
+              e=outE, f=outF, g=outG, h=outH, 
+              sel=address[3..5], out=out);
 }
+
