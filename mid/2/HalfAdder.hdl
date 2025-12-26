@@ -11,5 +11,10 @@ CHIP HalfAdder {
         carry;  // Left bit of a + b
 
     PARTS:
-    //// Replace this comment with your code.
+    // 1. 計算和 (sum) 位元
+    Xor(a=a, b=b, out=sum);
+
+    // 2. 計算進位 (carry) 位元
+    And(a=a, b=b, out=carry);
 }
+
