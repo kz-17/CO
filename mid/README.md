@@ -1,4 +1,4 @@
-使用Gemini
+習題:全由AI生成，都只能從名稱猜他要幹嘛
 # 第一章
 ### 基礎邏輯門 (Basic Gates)
 - Not,"Nand(in, in)"
