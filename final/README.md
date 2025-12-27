@@ -1,4 +1,4 @@
-### 習題:全由AI生成
+### 習題:全由AI生成，都只能從名稱猜他要幹嘛
 # 第六章
 Gemini:https://gemini.google.com/share/b5ff2b988831
 ### 基礎加法 (Add)
